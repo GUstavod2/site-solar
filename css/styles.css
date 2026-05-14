@@ -791,6 +791,7 @@ section[id] {
   width: max-content;
   will-change: transform;
   animation: marquee 30s linear infinite;
+  --set-count: 2;
 }
 
 .projetos-carousel-track:hover {
@@ -803,7 +804,7 @@ section[id] {
   }
 
   100% {
-    transform: translateX(calc(-50% - 0.5rem));
+    transform: translateX(calc((100% + 1rem) / var(--set-count) * -1));
   }
 }
 

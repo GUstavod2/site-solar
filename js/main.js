@@ -157,13 +157,19 @@
     var track = document.querySelector("[data-carousel-track]");
     if (!track) return;
     
-    // Duplicate the slides once to allow for a seamless infinite CSS marquee
+    // Duplicate the slides enough times to allow for a seamless infinite CSS marquee
+    // even on ultra-wide screens (e.g. 4k or 8k displays).
     var slides = Array.prototype.slice.call(track.querySelectorAll(".projetos-carousel-slide"));
-    slides.forEach(function (slide) {
-      var clone = slide.cloneNode(true);
-      clone.setAttribute("aria-hidden", "true");
-      track.appendChild(clone);
-    });
+    var numSets = 8;
+    track.style.setProperty("--set-count", numSets);
+    
+    for (var i = 1; i < numSets; i++) {
+      slides.forEach(function (slide) {
+        var clone = slide.cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        track.appendChild(clone);
+      });
+    }
   }
 
   initReveal();
