@@ -58,18 +58,26 @@
       var panel = panelId ? document.getElementById(panelId) : null;
       if (!panel) return;
 
+      // Remove hidden attribute so CSS transitions can work
+      panel.removeAttribute("hidden");
+
       btn.addEventListener("click", function () {
         var expanded = btn.getAttribute("aria-expanded") === "true";
+        // Close all other panels
         faqRoot.querySelectorAll("[data-faq-trigger]").forEach(function (other) {
           if (other === btn) return;
           var oid = other.getAttribute("aria-controls");
           var op = oid ? document.getElementById(oid) : null;
           other.setAttribute("aria-expanded", "false");
-          if (op) op.setAttribute("hidden", "");
+          if (op) op.classList.remove("is-open");
         });
+        // Toggle current panel
         btn.setAttribute("aria-expanded", expanded ? "false" : "true");
-        if (expanded) panel.setAttribute("hidden", "");
-        else panel.removeAttribute("hidden");
+        if (expanded) {
+          panel.classList.remove("is-open");
+        } else {
+          panel.classList.add("is-open");
+        }
       });
     });
   }
@@ -142,12 +150,27 @@
         form.reportValidity();
         return;
       }
+      
+      var nome = document.getElementById("nome").value;
+      var telefone = document.getElementById("telefone").value;
+      var email = document.getElementById("email").value;
+      var mensagem = document.getElementById("mensagem").value;
+
+      var text = "Olá! Gostaria de falar sobre energia solar.\n\n" +
+                 "Nome: " + nome + "\n" +
+                 "Telefone: " + telefone + "\n" +
+                 "E-mail: " + email + "\n" +
+                 "Mensagem: " + mensagem;
+
+      var whatsappUrl = "https://wa.me/5567998612875?text=" + encodeURIComponent(text);
+      window.open(whatsappUrl, "_blank");
+
       if (formFeedback) {
         formFeedback.hidden = false;
         formFeedback.classList.remove("is-error");
         formFeedback.classList.add("is-success");
         formFeedback.textContent =
-          "Mensagem registrada com sucesso. Em breve nossa equipe entra em contato. (Integração com e-mail ou CRM pode ser ligada aqui.)";
+          "Redirecionando para o WhatsApp...";
       }
       form.reset();
     });
